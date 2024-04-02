@@ -330,19 +330,21 @@ class FastDAC():
 
         channel_readings = {ac: list() for ac in channels}
         try:
-            while self.ser.in_waiting > 15 or len(channel_readings[0]) < steps:
+            while self.ser.in_waiting > 15 or (len(channel_readings[0]) < steps and not broken or len(channel_readings[0]) < steps - 1 and broken):
                 for channel in channels:
                     buffer = ""
                     if self.ser.in_waiting > 35:
                         buffer = self.ser.read(20)
                     else:
                         buffer = self.ser.read(2)
-
+                    # separate the buffer
+                    
                     info = []
                     for i in range(0, len(buffer), 2):
                         if len(buffer) >= i + 2:
                             info.append(buffer[i: i + 2])
                         else:
+                            broken = True
                             break  # discard malformed data at the end of the buffer
 
                     for two_b in info:
