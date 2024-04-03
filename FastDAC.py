@@ -330,7 +330,7 @@ class FastDAC():
 
         channel_readings = {ac: list() for ac in channels}
         try:
-            while self.ser.in_waiting > 15 or (len(channel_readings[0]) < steps and not broken or len(channel_readings[0]) < steps - 1 and broken):
+            while self.ser.in_waiting > 15 or (len(channel_readings[channels[0]]) < steps and not broken or len(channel_readings[channels[0]]) < steps - 1 and broken):
                 for channel in channels:
                     buffer = ""
                     if self.ser.in_waiting > 35:
